@@ -57,3 +57,23 @@ Este repositorio demuestra la eficiencia de utilizar **Astro** para sitios está
 
 ---
 **Desarrollado por un Backend Developer con el poder de la IA.**
+
+# Screenshot
+
+Login, por token o codigo de acceso donde el cliente introducia su codigo asignado para
+validar su usuario o session en esta caso para servirle la informacion
+![Logo](screenshot/login_based_token.png)
+
+Pantalla inicial despues de pasar la autenticacion por el token
+![Logo](screenshot/in_dashboard.png)
+
+Resultado/Error despues de una busqueda filtrada por fecha
+![Logo](screenshot/data_result.png)
+![Logo](screenshot/cards_result.png)
+![Logo](screenshot/error_http.png)
+
+Resultado despues de una busqueda filtrada por fecha
+![Logo](screenshot/data_result.png)
+
+Footer
+![Logo](screenshot/footer.png)
