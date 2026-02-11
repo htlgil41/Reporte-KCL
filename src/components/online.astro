@@ -1,0 +1,20 @@
+<script>
+    try {
+        
+        const validate_fetch = await fetch(
+            'http://reportes.grupomaraplus.com/kcl/in',
+            {
+                method: 'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                credentials: 'include',
+            },
+        );
+
+        const data = await validate_fetch.json();
+        if (!data) window.location.href = '/';
+    } catch (error) {
+        window.location.href = '/';
+    }
+</script>

@@ -1,5 +1,17 @@
 ---
-const { texto, subtexto } = Astro.props;
+const { 
+  r_total = '',
+  r_gtotal = '',
+  r_impuesto = '',
+  r_ticket = ''
+} = Astro.props;
+
+const FormatteNumber = (value: number) =>{
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value);
+}
 ---
 
 <header class="bg-white border-b border-slate-100 py-10 px-6 shadow-[0_4px_12px_rgba(0,0,0,0.02)]">
@@ -7,43 +19,116 @@ const { texto, subtexto } = Astro.props;
       
       <div class="space-y-1">
         <div class="flex items-center gap-2">
-            <span class="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
-            <span class="text-[10px] font-black text-blue-600 uppercase tracking-[0.3em]">Sistema de Control</span>
+            <span class="w-2 h-2 rounded-full bg-[#155dfb] animate-pulse"></span>
+            <span class="text-[10px] font-black text-[#155dfb] uppercase tracking-[0.3em]">Sistema de Control</span>
         </div>
-        <h1 class="text-3xl font-black text-slate-900 tracking-tight">{texto}</h1>
-        <p class="text-slate-400 text-sm font-medium">{subtexto}</p>
+        <h1 class="text-3xl font-black text-slate-900 tracking-tight">Dashboard KCL</h1>
+        <p class="text-slate-900 text-sm font-medium">Resumen consolidado de operaciones</p>
       </div>
 
       <div class="relative group">
-        <span class="absolute -top-6 left-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-            Consultar Fecha de Operación
+        <span class="absolute -top-6 left-2 text-[10px] font-bold text-slate-700 uppercase tracking-widest">
+          Totales Consolidados
         </span>
         
-        <div class="flex items-center bg-white border border-slate-200 p-1.5 rounded-2xl shadow-sm 
-                    transition-all duration-300 focus-within:ring-4 focus-within:ring-blue-500/10 
-                    focus-within:border-blue-400 group-hover:shadow-md">
+        <div class="metrics-responsive-container" id="cards_totales">
             
-            <div class="pl-4 pr-2 text-slate-400">
-                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                </svg>
+            <div class="metric-box border-b lg:border-b-0 lg:border-r border-slate-100">
+                <p class="metric-label">Totales</p>
+                <div class="flex items-center gap-2">
+                    <span class="metric-value-compact">{FormatteNumber(r_total)}</span>
+                    <span class="text-green-900">↑</span>
+                </div>
             </div>
 
-            <input 
-              type="date" 
-              class="bg-transparent border-none text-slate-700 font-bold text-sm focus:ring-0 cursor-pointer pr-4 py-2"
-            />
+            <div class="metric-box border-b lg:border-b-0 lg:border-r border-slate-100">
+                <p class="metric-label">Subtotales</p>
+                <div class="flex items-center gap-2">
+                    <span class="metric-value-compact">{FormatteNumber(r_gtotal)}</span>
+                    <span class="text-green-900">↑</span>
+                </div>
+            </div>
 
-            <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl 
-                           text-xs font-black uppercase tracking-widest shadow-lg shadow-blue-200 
-                           transition-all active:scale-95 flex items-center gap-2">
-              <span>Actualizar</span>
-              <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+            <div class="metric-box border-b lg:border-b-0 lg:border-r border-slate-100">
+                <p class="metric-label">Impuesto Total</p>
+                <div class="flex items-center gap-2">
+                    <span class="metric-value-compact">{FormatteNumber(r_impuesto)}</span>
+                    <span class="text-red-900 rotate-180">↑</span>
+                </div>
+            </div>
+
+            <div class="metric-box">
+                <p class="metric-label">Tickets Totales</p>
+                <span class="metric-value-compact">#{r_ticket}</span>
+            </div>
+
         </div>
       </div>
 
     </div>
 </header>
+
+<style is:global>
+  .metrics-responsive-container {
+    display: grid;
+    grid-template-cols: repeat(2, 1fr);
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    min-width: 280px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.02);
+    transition: all 0.3s ease;
+  }
+  @media (min-width: 1024px) {
+    .metrics-responsive-container {
+      display: flex;
+      grid-template-cols: none;
+      min-width: fit-content;
+    }
+    .metric-box {
+      min-width: 140px;
+    }
+  }
+  .metric-box {
+    padding: 1rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: white;
+    transition: all 0.3s ease;
+  }
+  .metric-box:hover {
+    background: #f8fbff;
+  }
+  .metric-label {
+    font-size: 8px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #94a3b8;
+    margin-bottom: 2px;
+  }
+  .metric-value-compact {
+    font-size: 1.1rem;
+    font-weight: 900;
+    color: #0f172a;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+    transition: color 0.3s ease;
+  }
+  .metrics-responsive-container:hover {
+    border-color: #155dfb;
+  }
+  .metrics-responsive-container:hover .metric-value-compact {
+    color: #155dfb;
+  }
+  .trend-badge-mini {
+    font-size: 9px;
+    color: #10b981;
+    font-weight: 900;
+    background: #ecfdf5;
+    padding: 1px 4px;
+    border-radius: 4px;
+  }
+</style>

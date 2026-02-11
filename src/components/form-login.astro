@@ -1,10 +1,11 @@
-<form class="refined-auth-form">
+<form class="refined-auth-form" id="form-token">
   <div class="form-container-box">
     <div class="form-content-inner">      
       <div class="input-relative-group">
         <input 
           type="password" 
-          id="token" 
+          id="token"
+          name="code" 
           required 
           placeholder="000-000-000" 
           class="elegant-token-input"
@@ -102,3 +103,38 @@
     transform: scale(0.97);
   }
 </style>
+
+<script>
+  const formlogin = document.getElementById('form-token') as HTMLFormElement;
+  if (formlogin) {
+    formlogin.addEventListener('submit', async (e) =>{
+      e.preventDefault();
+
+      const formDataAtuh = new FormData(formlogin);
+      const data = Object.fromEntries(formDataAtuh.entries());
+      console.log(data)
+      if ('code' in data){
+        try {
+          
+          const post_for_auth = await fetch(
+            'http://reportes.grupomaraplus.com/kcl/c',
+            {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              },
+              credentials: 'include',
+              body: JSON.stringify(data),
+            },
+          );
+          const data_auth = await post_for_auth.json();
+          if (data_auth) window.location.href = '/dash'
+        } catch (error) {
+          
+          alert("Error en el fectch")
+        }
+      }
+    });
+  }
+
+</script>
