@@ -31,7 +31,7 @@ interface Totales {
   r_ticket: number;
 }
 
-const base_url: string = 'http://reportes.grupomaraplus.com/kcl';
+const base_url: string = 'URL/';
 let error_has: boolean = false;
 let data: VentasK | null = null;
 let totales: Totales = {
@@ -125,6 +125,7 @@ if (ventasy_fectch.ok){
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" id="cards-ventas">
               {data.ventas.length > 0 ? data.ventas.sort((a, b) => b.total - a.total).map((va, i) => (
                 <CardVentas 
+                  index={i+1}
                   cod_suc={va.cod_suc} 
                   sucursal={va.sucursal}
                   animation={i}
@@ -142,7 +143,6 @@ if (ventasy_fectch.ok){
         }
       </section>
     </main>
-    
     <Footer></Footer>
   </body>
 </DashLayout>
@@ -224,7 +224,7 @@ if (ventasy_fectch.ok){
         title_consolidado ? title_consolidado.innerText = `${fecha.date ?? ''}` : title_consolidado;
         try {
           const ventasy_fectch = await fetch(
-              `http://reportes.grupomaraplus.com/kcl/d/${fecha.date ?? ''}`,
+              `URL/${fecha.date ?? ''}`,
               {
                   method: 'GET',
                   headers: {
@@ -249,6 +249,7 @@ if (ventasy_fectch.ok){
               total: number;
             }[];
           };
+
           const ranking = data.ventas.sort((a, b) => b.total - a.total);
           const totales = ranking.reduce((current, val) => {
               current = {
@@ -271,7 +272,7 @@ if (ventasy_fectch.ok){
                   <p class="metric-label">Totales</p>
                   <div class="flex items-center gap-2">
                       <span class="metric-value-compact">
-                        ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totales.r_total)}
+                        ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totales.r_gtotal)}
                       </span>
                       <span class="text-green-900">↑</span>
                   </div>
@@ -281,7 +282,7 @@ if (ventasy_fectch.ok){
                   <p class="metric-label">Subtotales</p>
                   <div class="flex items-center gap-2">
                       <span class="metric-value-compact">
-                        ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totales.r_gtotal)}
+                        ${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(totales.r_total)}
                         </span>
                       <span class="text-green-900">↑</span>
                   </div>
@@ -305,7 +306,9 @@ if (ventasy_fectch.ok){
               ranking.map((c, i) => `
               <div class="card-container" id="card-container" style={'animation-delay: ${i * 100}ms'}>
                 <div class="card-professional" id="card-professional">
-                  <div class="flex items-center gap-3 mb-6">
+
+                  <span class="ranking-number">#${i+1}</span>
+                  <div class="flex items-center gap-3 mb-6 relative z-10">
                     <div class="icon-box w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-blue-600 shadow-sm">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -319,15 +322,15 @@ if (ventasy_fectch.ok){
 
                     <div class="space-y-2 mb-6 text-sm">
                         <div class="flex justify-between"><span class="text-slate-700">Ticket</span><span class="font-semibold text-slate-400">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.cantidad)}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-700">Total</span><span class="font-semibold text-slate-700">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.total)}</span></div>
-                        <div class="flex justify-between"><span class="text-slate-700">Subtotal</span><span class="font-semibold text-slate-700">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.gtotal)}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-700">Total</span><span class="font-semibold text-slate-700">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.gtotal)}</span></div>
+                        <div class="flex justify-between"><span class="text-slate-700">Subtotal</span><span class="font-semibold text-slate-700">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.total)}</span></div>
                         <div class="flex justify-between"><span class="text-slate-700">Impuestos</span><span class="font-semibold text-slate-400">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.impuesto)}</span></div>
                     </div>
 
                     <div class="mt-auto pt-4 border-t border-slate-50 flex justify-between items-end">
                         <div>
                         <p class="text-[9px] font-black text-blue-600 uppercase mb-1">Total Neto</p>
-                        <p class="text-2xl font-black text-slate-900 leading-none">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.total)}</p>
+                        <p class="text-2xl font-black text-slate-900 leading-none">${new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(c.gtotal)}</p>
                         </div>
                     </div>
                   </div>
@@ -355,10 +358,8 @@ if (ventasy_fectch.ok){
             cardds_totales.innerHTML = htmlCardsTotales;
           }
         } catch (error) {
-          
-          console.log(error)
           if (cardas_parents) cardas_parents.innerHTML = `
-            <div class="flex justify-center items-center py-20 px-4 w-full">
+            <div class="col-span-full flex justify-center items-center py-20 px-4">
               <div class="error-status-card">
                   <div class="error-icon-box">
                       <svg xmlns="http://www.w3.org/2000/svg" class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">

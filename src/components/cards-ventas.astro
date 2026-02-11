@@ -1,5 +1,6 @@
 ---
 const {
+    index = 1,
     cod_suc = '',
     sucursal = '',
     animation = 0,
@@ -20,7 +21,8 @@ const FormatteNumber = (value: number) =>{
 <div class="card-container" id="card-container" style={`animation-delay: ${animation * 100}ms`}>
     <div class="card-professional" id="card-professional">
     
-    <div class="flex items-center gap-3 mb-6">
+    <span class="ranking-number">#{index}</span>
+    <div class="flex items-center gap-3 mb-6 relative z-10">
         <div class="icon-box w-10 h-10 rounded-xl bg-slate-50 flex items-center justify-center text-blue-600 shadow-sm">
         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
             <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
@@ -73,7 +75,6 @@ const FormatteNumber = (value: number) =>{
     border-color: #0772ddd5;
     box-shadow: 0 20px 40px rgba(37, 99, 235, 0.08);
     }
-    
     .card-professional::after {
     content: "";
     position: absolute;
@@ -81,7 +82,7 @@ const FormatteNumber = (value: number) =>{
     left: 0;
     width: 100%;
     height: 4px;
-    background: #2563eb; /* blue-600 */
+    background: #2563eb;
     transform: scaleX(0);
     transition: transform 0.5s ease;
     }
@@ -91,7 +92,7 @@ const FormatteNumber = (value: number) =>{
 }
 .card-professional:active {
     transform: scale(0.96) translateY(0) !important;
-    background-color: #f8fafc; /* slate-50 */
+    background-color: #f8fafc;
     box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
     transition: all 0.1s ease;
 }
@@ -111,5 +112,27 @@ const FormatteNumber = (value: number) =>{
 @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+}
+.ranking-number {
+    position: absolute;
+    top: 0.5rem;
+    right: 1rem;
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: #2564eb16;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    user-select: none;
+    pointer-events: none;
+    transition: all 0.4s ease;
+    z-index: 0;
+}
+.card-professional:hover .ranking-number {
+    color: #155dfb15;
+    transform: scale(1.1) translateY(5px);
+}
+.relative.z-10 {
+    position: relative;
+    z-index: 10;
 }
 </style>
